@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.udemy.compras.domain.Cliente;
+import com.udemy.compras.domain.entity.Cliente;
+import com.udemy.compras.domain.vo.ClienteInput;
 import com.udemy.compras.repository.ClienteRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +27,9 @@ public class ClienteQueryGraphQL implements GraphQLQueryResolver, GraphQLMutatio
     }
 
     @Transactional
-    public Cliente saveCliente(Long id, String nome, String email) {
-        return clienteRepository.save(new Cliente(id, nome, email));
+    public Cliente saveCliente(ClienteInput clienteInput) {
+        ModelMapper modelMapper = new ModelMapper();
+        return clienteRepository.save(modelMapper.map(clienteInput, Cliente.class));
     }
 
     @Transactional
